@@ -50,4 +50,4 @@ jobs:
           app-name: 'testeoaplicativospringboot'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_45A8A5E1490949DAA920422582AFE199 }}
-          package: '*.war'
+          package: '*.jar'
