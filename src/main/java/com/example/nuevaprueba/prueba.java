@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/")
 public class prueba {
-@GetMapping("")
+    
+    @GetMapping("")
+    @ResponseBody
     public String inicio(){
 
     return "inicio";
