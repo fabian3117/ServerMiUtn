@@ -10,6 +10,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.StreamUtils;
 
 
+import java.io.File;
 import java.util.List;
 
 import java.io.IOException;
@@ -64,6 +65,22 @@ public class prueba {
   //      String resourceName="archivosMarkdown/"+id;
 //        ClassPathResource resource = new ClassPathResource(resourceName);
           System.out.println("ESS");
+
+          String directorioActual = new File(".").getAbsolutePath();
+          System.out.println("Directorio actual: " + directorioActual);
+          File[] archivos = new File(directorioActual).listFiles();
+          ArrayList<String> errors= new ArrayList<>();
+
+          if (archivos != null) {
+              System.out.println("Archivos en el directorio actual:");
+              for (File archivo : archivos) {
+                  if (archivo.isFile()) {
+                      System.out.println(archivo.getName());
+                      errors.add(archivo.getName());
+                  }
+              }
+          }
+model.addAttribute("errors",errors);
           model.addAttribute("error","resource.getPath()");
           ClassPathResource tryresource = new ClassPathResource("a/mi-archivo.txt");
 

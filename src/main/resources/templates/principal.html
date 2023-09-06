@@ -7,8 +7,12 @@
 
 </head>
 <body>
-<div th:if="${error != null}">
-    <a th:text="${error}">ss</a>
+<div th:if="${errors != null}">
+    <ul>
+        <li th:each="error : ${errors}">
+            <a th:text="${error}"></a>
+        </li>
+    </ul>
 </div>
 
 <section th:replace="layout/elementosGenericosWeb :: parteSuperior"></section>
