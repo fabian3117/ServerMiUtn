@@ -65,6 +65,8 @@ public class prueba {
 //        ClassPathResource resource = new ClassPathResource(resourceName);
           System.out.println("ESS");
         ClassPathResource resource = Archivos.ObtenerPathArchivo(CategoriaArchivos.archivosMarkdown,id);
+        System.out.println(resource.getPath());
+        model.addAttribute("error",resource.getPath());
         Parser parser = Parser.builder().build();
         model.addAttribute("Titulo",id);
         if(resource.exists()){
@@ -81,7 +83,11 @@ public class prueba {
             return "principal";
         }
     }
-
-     
+    @GetMapping("/verificacion")
+    @ResponseBody
+    public String Verificacion(){
+        //-->   Vamos a verificar si podemos obtener acceso a un archivo    <--
+        return "nada";
+    }
     
 }
