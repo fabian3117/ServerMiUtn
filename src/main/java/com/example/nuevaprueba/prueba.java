@@ -14,6 +14,13 @@ public class prueba {
     return "inicio";
 }
 
+     @GetMapping("/saludar")
+    @ResponseBody
+    public String teste(){
+
+    return "SaludoTesteo";
+}
+
     @PostMapping("")
 @ResponseBody
     public String saludo(){
