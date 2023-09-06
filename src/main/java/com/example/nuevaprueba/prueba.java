@@ -3,6 +3,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
+import org.commonmark.node.Node;
+import org.commonmark.parser.Parser;
+import org.commonmark.renderer.html.HtmlRenderer;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.util.StreamUtils;
+
 
 import java.util.List;
 
@@ -51,5 +57,30 @@ public class prueba {
     public String saludo(){
         return "saludo";
 }
+      @GetMapping("/lectura/{id}")
+   // @ResponseBody
+    public String Lectura(@PathVariable String id, Model model) throws IOException {
+        //String resourceName="archivosMarkdown/info1.md";
+  //      String resourceName="archivosMarkdown/"+id;
+//        ClassPathResource resource = new ClassPathResource(resourceName);
+        ClassPathResource resource = Archivos.ObtenerPathArchivo(CategoriaArchivos.archivosMarkdown,id);
+        Parser parser = Parser.builder().build();
+        model.addAttribute("Titulo",id);
+        if(resource.exists()){
+            System.out.println("EXISTE");
+            String markdownContent= StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
+            Node document = parser.parse(markdownContent);
+            HtmlRenderer renderer = HtmlRenderer.builder().build();
+            String htmlContent = renderer.render(document);
+            model.addAttribute("htmlContent", htmlContent);
+            return "testMarkdown";
+        }
+        else{
+            System.out.println("No Existe");
+            return "principal";
+        }
+    }
+
+     
     
 }
