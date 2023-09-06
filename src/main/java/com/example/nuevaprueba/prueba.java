@@ -23,7 +23,7 @@ public class prueba {
     return "inicio";
 }
      @GetMapping("/mostrar")
-  //  @ResponseBody
+    @ResponseBody
     public String Saludo(Model model){
       //  System.out.println("SS");
         List<Materias> materias=materiasRepo.findAll();
