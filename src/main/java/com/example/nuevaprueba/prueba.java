@@ -65,6 +65,8 @@ public class prueba {
 //        ClassPathResource resource = new ClassPathResource(resourceName);
           System.out.println("ESS");
           model.addAttribute("error","resource.getPath()");
+          ClassPathResource tryresource = new ClassPathResource("a/mi-archivo.txt");
+
           ClassPathResource resource = Archivos.ObtenerPathArchivo(CategoriaArchivos.archivosMarkdown,id);
           System.out.println(resource.getPath());
         Parser parser = Parser.builder().build();
