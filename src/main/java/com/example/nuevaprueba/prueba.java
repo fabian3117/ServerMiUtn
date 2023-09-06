@@ -22,7 +22,7 @@ public class prueba {
 
     return "inicio";
 }
-     @RequestMapping("/mostrar")
+     @GetMapping("/mostrar")
   //  @ResponseBody
     public String Saludo(Model model){
       //  System.out.println("SS");
