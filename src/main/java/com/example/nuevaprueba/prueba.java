@@ -42,7 +42,7 @@ public class prueba {
     @ResponseBody
     public String teste(){
         List<Materias> materiasList=materiasRepo.findAll();
-        return (materiasList.isEmpty()?"vacio":"conALgo");
+        return (materiasList.isEmpty()?"vacioTT":"conALgoss");
 //        return "SaludoTesteo";
     }
 
