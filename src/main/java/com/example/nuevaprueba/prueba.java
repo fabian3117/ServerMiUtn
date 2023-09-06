@@ -10,10 +10,9 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.StreamUtils;
 
 
-import java.io.File;
+import java.io.*;
 import java.util.List;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
@@ -103,10 +102,38 @@ model.addAttribute("errors",errors);
         }
     }
     @GetMapping("/verificacion")
-    @ResponseBody
-    public String Verificacion(){
+    //@ResponseBody
+    public ArrayList<String> Verificacion(Model model){
         //-->   Vamos a verificar si podemos obtener acceso a un archivo    <--
-        return "nada";
+        //String DIRECCION = "C://home/site/wwwroot/archivosMarkdown/info.md";
+        String DIRECCION = "C:\\home\\site\\wwwroot\\archivosMarkdown\\info.md";
+        ArrayList<String> buf = new ArrayList<>();
+        try {
+            // Abre el archivo para lectura
+            FileInputStream archivoEntrada = new FileInputStream(DIRECCION);
+            InputStreamReader lector = new InputStreamReader(archivoEntrada);
+            BufferedReader bufferedReader = new BufferedReader(lector);
+
+            // Lee el contenido línea por línea
+            String linea;
+            while ((linea = bufferedReader.readLine()) != null) {
+                // Procesa cada línea como desees
+                System.out.println(linea);
+                buf.add(linea);
+            }
+            // Cierra los recursos
+            bufferedReader.close();
+            lector.close();
+            archivoEntrada.close();
+            return buf;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return buf;
+        }
+
+
+
+
     }
     
 }
