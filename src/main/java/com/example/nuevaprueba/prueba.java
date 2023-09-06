@@ -26,7 +26,7 @@ public class prueba {
   //  @ResponseBody
     public String Saludo(Model model){
       //  System.out.println("SS");
-        List<Materias> materias=materia.findAll();
+        List<Materias> materias=materiasRepo.findAll();
 //        model.addAttribute("elementos",materias.get(0).getNombreMateria());
         ArrayList<String> nombreMaterias = new ArrayList<>();
         materias.forEach(elemento ->{
