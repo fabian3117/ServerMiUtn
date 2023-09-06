@@ -63,6 +63,7 @@ public class prueba {
         //String resourceName="archivosMarkdown/info1.md";
   //      String resourceName="archivosMarkdown/"+id;
 //        ClassPathResource resource = new ClassPathResource(resourceName);
+          System.out.println("ESS");
         ClassPathResource resource = Archivos.ObtenerPathArchivo(CategoriaArchivos.archivosMarkdown,id);
         Parser parser = Parser.builder().build();
         model.addAttribute("Titulo",id);
