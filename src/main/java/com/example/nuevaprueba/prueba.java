@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 public class prueba {
     
     @GetMapping("")
-    @ResponseBody
     public String inicio(){
 
     return "inicio";
