@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ing Electronica</title>
+    <link rel="stylesheet"  th:href="@{/css/styles.css}">
+
+</head>
+<body>
+<section th:replace="layout/elementosGenericosWeb :: parteSuperior"></section>
+
+<div th:if="${materias !=null }" class="centered-buttons" >
+<button class="button" th:each="materia :${materias}" th:value="${materia.programa}" th:text="${materia.nombreMateria}" th:onclick="clickElemento()">
+
+    </br>
+</button>
+<script th:if="${materias!=null}" th:inline="javascript">
+//-->   Este codigo JS tiene que estar asociado a los 'elementos' para  que no se envie si no se envia los botones  (Por capricho)<--
+function clickElemento(){
+    /*<![CDATA[*/
+    //-->   TODO: Cambiar por algo mejor esto es muy croto  <--
+    console.log("Hizo click : "+event.target.value);
+    window.location.href="/lectura/"+event.target.value;
+}
+/*]]>*/
+</script>
+</div>
+<section th:replace="layout/elementosGenericosWeb :: parteInferior"></section>
+</body>
+</html>
