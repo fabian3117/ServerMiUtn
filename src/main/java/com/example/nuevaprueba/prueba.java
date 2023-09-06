@@ -102,7 +102,7 @@ model.addAttribute("errors",errors);
         }
     }
     @GetMapping("/verificacion")
-    //@ResponseBody
+    @ResponseBody
     public ArrayList<String> Verificacion(Model model){
         //-->   Vamos a verificar si podemos obtener acceso a un archivo    <--
         //String DIRECCION = "C://home/site/wwwroot/archivosMarkdown/info.md";
