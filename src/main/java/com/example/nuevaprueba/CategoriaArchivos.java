@@ -2,7 +2,7 @@ package com.example.nuevaprueba;
 
 public enum CategoriaArchivos {
 archivosPDF("archivosPDF/"),
-archivosMarkdown("archivosMarkdown/");
+archivosMarkdown("archivosMarkdown");
 
 private String valor;
     CategoriaArchivos(String valor) {

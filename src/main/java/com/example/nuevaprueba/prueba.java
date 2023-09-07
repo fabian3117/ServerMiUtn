@@ -101,10 +101,10 @@ model.addAttribute("errors",errors);
             return "principal";
         }
     }
-    @GetMapping("/verificacion")
+    @GetMapping("/verificacion/{id}")
     @ResponseBody
-    public ArrayList<String> Verificacion(Model model){
-        //-->   Vamos a verificar si podemos obtener acceso a un archivo    <--
+    public String Verificacion(@PathVariable String id, Model model){
+       /* //-->   Vamos a verificar si podemos obtener acceso a un archivo    <--
         //String DIRECCION = "C://home/site/wwwroot/archivosMarkdown/info.md";
         String DIRECCION = "C:\\home\\site\\wwwroot\\archivosMarkdown\\info.md";
         ArrayList<String> buf = new ArrayList<>();
@@ -116,6 +116,7 @@ model.addAttribute("errors",errors);
 
             // Lee el contenido línea por línea
             String linea;
+
             while ((linea = bufferedReader.readLine()) != null) {
                 // Procesa cada línea como desees
                 System.out.println(linea);
@@ -129,7 +130,9 @@ model.addAttribute("errors",errors);
         } catch (IOException e) {
             e.printStackTrace();
             return buf;
-        }
+        }*/
+return        Archivos.StringFileAsociado(id,CategoriaArchivos.archivosMarkdown);
+      //  return null;
 
 
 

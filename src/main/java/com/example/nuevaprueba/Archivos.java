@@ -6,9 +6,7 @@ import org.commonmark.renderer.html.HtmlRenderer;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.StreamUtils;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -25,6 +23,31 @@ public class Archivos {
     static public String convertirStringArchivo(ClassPathResource path) throws IOException {
         String markdownContent=StreamUtils.copyToString(path.getInputStream(), StandardCharsets.UTF_8);
         return markdownContent;
+    }
+
+    static public String StringFileAsociado(String id,CategoriaArchivos categoriaArchivos){
+    String direccion=Generales.Direccion+categoriaArchivos+Generales.Separador+id;
+        StringBuilder contenido = new StringBuilder();
+    try{
+        FileInputStream archivoEntrada = new FileInputStream(direccion);
+        InputStreamReader lector = new InputStreamReader(archivoEntrada);
+        BufferedReader bufferedReader = new BufferedReader(lector);
+        int caracter;
+        while ((caracter = bufferedReader.read()) != -1) {
+            contenido.append((char) caracter);
+        }
+        // Cierra los recursos
+        bufferedReader.close();
+        lector.close();
+        archivoEntrada.close();
+
+        return contenido.toString();
+    }
+    catch (IOException e){
+        e.printStackTrace();
+        return "";
+    }
+
     }
     static public String archivoMarkdown(String id) throws IOException {
         String resourceName="archivosMarkdown/"+id;
