@@ -63,43 +63,13 @@ public class prueba {
         //String resourceName="archivosMarkdown/info1.md";
   //      String resourceName="archivosMarkdown/"+id;
 //        ClassPathResource resource = new ClassPathResource(resourceName);
-          System.out.println("ESS");
 
-          String directorioActual = new File(".").getAbsolutePath();
-          System.out.println("Directorio actual: " + directorioActual);
-          File[] archivos = new File(directorioActual).listFiles();
-          ArrayList<String> errors= new ArrayList<>();
-
-          if (archivos != null) {
-              System.out.println("Archivos en el directorio actual:");
-              for (File archivo : archivos) {
-                  if (archivo.isFile()) {
-                      System.out.println(archivo.getName());
-                      errors.add(archivo.getName());
-                  }
-              }
-          }
-model.addAttribute("errors",errors);
           model.addAttribute("error","resource.getPath()");
-          ClassPathResource tryresource = new ClassPathResource("a/mi-archivo.txt");
-
-          ClassPathResource resource = Archivos.ObtenerPathArchivo(CategoriaArchivos.archivosMarkdown,id);
-          System.out.println(resource.getPath());
-        Parser parser = Parser.builder().build();
-        model.addAttribute("Titulo",id);
-        if(resource.exists()){
-            System.out.println("EXISTE");
-            String markdownContent= StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
-            Node document = parser.parse(markdownContent);
-            HtmlRenderer renderer = HtmlRenderer.builder().build();
-            String htmlContent = renderer.render(document);
-            model.addAttribute("htmlContent", htmlContent);
+          String markdownContent=Archivos.StringFileAsociado(id,CategoriaArchivos.archivosMarkdown);
+            model.addAttribute("Titulo",id);
+          model.addAttribute("htmlContent", Archivos.MarkdownToHtml(markdownContent));
             return "testMarkdown";
-        }
-        else{
-            System.out.println("No Existe");
-            return "principal";
-        }
+
     }
     @GetMapping("/verificacion/{id}")
     @ResponseBody

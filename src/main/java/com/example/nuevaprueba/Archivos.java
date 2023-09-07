@@ -62,6 +62,12 @@ public class Archivos {
         HtmlRenderer renderer = HtmlRenderer.builder().build();
         return renderer.render(document);
     }
+    static String MarkdownToHtml(String markdownContent){
+        Parser parser = Parser.builder().build();
+        Node document = parser.parse(markdownContent);
+        HtmlRenderer renderer = HtmlRenderer.builder().build();
+        return renderer.render(document);
+    }
     static public File fileMarkdwond(String id) throws IOException{
         String resourceName="archivosMarkdown/"+id;
         ClassPathResource resource = new ClassPathResource(resourceName);
