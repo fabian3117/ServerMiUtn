@@ -6,6 +6,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import java.io.IOException;
 
@@ -19,6 +21,14 @@ import java.io.IOException;
 public class ControlerMails {
     @Autowired
     private JavaMailSender javaMailSender;
+
+    @Autowired
+    private final SpringTemplateEngine springTemplateEngine;
+
+    public ControlerMails(SpringTemplateEngine springTemplateEngine) {
+        this.springTemplateEngine = springTemplateEngine;
+    }
+
     @GetMapping("/{id}")
     @ResponseBody
     public void EnvioCorreo(@PathVariable String id, @ModelAttribute CorreoModelo correoModelo) throws MessagingException, javax.mail.MessagingException, IOException {
@@ -29,7 +39,12 @@ public class ControlerMails {
 
         mimeMessageHelper.setSubject( Generales.MensajeMailApuntes);
         String markdownContent=Archivos.StringFileAsociado(id,CategoriaArchivos.archivosMarkdown);
-        mimeMessageHelper.setText(markdownContent,true);
+        Context context = new Context();
+        context.setVariable("htmlContent",markdownContent);
+        String content = springTemplateEngine.process("templateMails", context);
+
+
+        mimeMessageHelper.setText(content,true);
         //mimeMessageHelper.addAttachment("Adjunto",Archivos.obtainFile(CategoriaArchivos.archivosPDF,"Info1.pdf"));
         javaMailSender.send(mimeMessageHelper.getMimeMessage());
     }
