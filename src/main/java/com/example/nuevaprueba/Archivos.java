@@ -74,18 +74,10 @@ public class Archivos {
         //TODO Corregir problema de si archivo es nullo
         return resource.getFile();
     }
-    static public File obtainFile(CategoriaArchivos categoriaArchivos,String id) throws IOException{
-        ClassPathResource resource=ObtenerPathArchivo(categoriaArchivos, id);
-        if (!resource.exists()) {
-            //-->   En caso de no encontrarse el archivo excepcion  <--
-            throw new FileNotFoundException("El archivo no se encuentra.");
-        }
-        try {
-            return resource.getFile();
-        } catch (IOException e) {
-            //-->   En caso de problemas emito excepcion <-- Manejar la excepción de E/S (IOException)
-            throw new IOException("Error al obtener el archivo.", e);
-        }
+    static public File obtainFile(CategoriaArchivos categoriaArchivos,String id) throws IOException {
+        String rutaAbsoluta = Generales.Direccion + categoriaArchivos + Generales.Separador + id;
+        File archivo = new File(rutaAbsoluta);
+    return  archivo;
     }
     static public String nameFilePDF(String id){
         return ObtenerPathArchivo(CategoriaArchivos.archivosPDF,id).getFilename();

@@ -114,6 +114,7 @@ return        Archivos.StringFileAsociado(id,CategoriaArchivos.archivosMarkdown)
 
 
     }
+    /*
     @GetMapping("/correo/{id}")
     @ResponseBody
     public String tryMail(@PathVariable String id) throws MessagingException, javax.mail.MessagingException {
@@ -129,19 +130,7 @@ return        Archivos.StringFileAsociado(id,CategoriaArchivos.archivosMarkdown)
         mimeMessageHelper.setText(email);
         javaMailSender.send(mimeMessageHelper.getMimeMessage());
     //    helper.setText(email);
-/*        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
-        helper.setFrom(from);
-        helper.setTo(email);
-        helper.setSubject("EMAIL_CONFIRMATION_SUBJECT");
-        helper.setText(email);
-
-
-        //send(email, from, message);
-        javaMailSender.send(helper.getMimeMessage());
-        */
-
         return "";
-    }
+    }*/
     
 }
