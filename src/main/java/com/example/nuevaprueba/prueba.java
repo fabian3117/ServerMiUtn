@@ -1,4 +1,8 @@
 package com.example.nuevaprueba;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +26,8 @@ import java.util.ArrayList;
 public class prueba {
      @Autowired
     private MateriasRepo materiasRepo;
+    @Autowired
+    private JavaMailSender javaMailSender;
     
     @GetMapping("")
     public String inicio(){
@@ -107,6 +113,35 @@ return        Archivos.StringFileAsociado(id,CategoriaArchivos.archivosMarkdown)
 
 
 
+    }
+    @GetMapping("/correo/{id}")
+    @ResponseBody
+    public String tryMail(@PathVariable String id) throws MessagingException, javax.mail.MessagingException {
+        System.out.println(id);
+        String email="fabian3117@frba.utn.edu.ar";
+        String message = "Welcome to Udeesa, test token";
+        String from = "no-reply@udeesa.org";
+        javax.mail.internet.MimeMessage mimeMessage1 = javaMailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper=new MimeMessageHelper(mimeMessage1,"utf-8");
+        mimeMessageHelper.setFrom(from);
+        mimeMessageHelper.setTo(email);
+        mimeMessageHelper.setSubject("EMAIL_CONFIRMATION_SUBJECT");
+        mimeMessageHelper.setText(email);
+        javaMailSender.send(mimeMessageHelper.getMimeMessage());
+    //    helper.setText(email);
+/*        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+        helper.setFrom(from);
+        helper.setTo(email);
+        helper.setSubject("EMAIL_CONFIRMATION_SUBJECT");
+        helper.setText(email);
+
+
+        //send(email, from, message);
+        javaMailSender.send(helper.getMimeMessage());
+        */
+
+        return "";
     }
     
 }
