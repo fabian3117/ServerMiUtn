@@ -28,8 +28,9 @@ public class ControlerMails {
         mimeMessageHelper.setTo(correoModelo.getCorreo());
 
         mimeMessageHelper.setSubject( Generales.MensajeMailApuntes);
-        mimeMessageHelper.setText("email");
-        mimeMessageHelper.addAttachment("Adjunto",Archivos.obtainFile(CategoriaArchivos.archivosPDF,"Info1.pdf"));
+        String markdownContent=Archivos.StringFileAsociado(id,CategoriaArchivos.archivosMarkdown);
+        mimeMessageHelper.setText(markdownContent,true);
+        //mimeMessageHelper.addAttachment("Adjunto",Archivos.obtainFile(CategoriaArchivos.archivosPDF,"Info1.pdf"));
         javaMailSender.send(mimeMessageHelper.getMimeMessage());
     }
 
