@@ -100,8 +100,8 @@ public String inicializar(){
 
         model.addAttribute("elementos",nombreMaterias);
         model.addAttribute("materias",materias);
-         return "inicio";
-        //return "principal";
+       //  return "inicio";
+        return "principal";
     }
 
       @GetMapping("/saludar")
