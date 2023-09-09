@@ -9,7 +9,7 @@ import org.springframework.util.StreamUtils;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
-/**
+/** Esta clase es la encargada de gestionar los accesos internos a los archivos
  * Clase encargada del manejo de los archivos
  */
 public class Archivos {
@@ -26,8 +26,9 @@ public class Archivos {
     }
 
     static public String StringFileAsociado(String id,CategoriaArchivos categoriaArchivos){
-    String direccion=Generales.Direccion+categoriaArchivos+Generales.Separador+id;
-        StringBuilder contenido = new StringBuilder();
+        String direccion=Generales.Direccion+categoriaArchivos+Generales.Separador+id;
+
+    StringBuilder contenido = new StringBuilder();
     try{
         FileInputStream archivoEntrada = new FileInputStream(direccion);
         InputStreamReader lector = new InputStreamReader(archivoEntrada);
@@ -36,7 +37,6 @@ public class Archivos {
         while ((caracter = bufferedReader.read()) != -1) {
             contenido.append((char) caracter);
         }
-        // Cierra los recursos
         bufferedReader.close();
         lector.close();
         archivoEntrada.close();

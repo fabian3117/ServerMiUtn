@@ -117,7 +117,7 @@
         const btncl=document.getElementById("subir");
         btncl.addEventListener('click',()=>{
            var direccion=window.location.href.replace("lectura","Correos");
-            direccion=direccion.replace(".md",".pdf");
+          //  direccion=direccion.replace(".md",".pdf");
             let form=document.getElementById("inputForm");
             form.action=direccion;
             console.log("Direccion completa : "+direccion);
