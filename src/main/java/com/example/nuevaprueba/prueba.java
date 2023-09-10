@@ -1,6 +1,7 @@
 package com.example.nuevaprueba;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 @Controller
+@Slf4j
 //@RestController
 @RequestMapping("")
 public class prueba {
@@ -97,7 +99,8 @@ public String inicializar(){
         materias.forEach(elemento ->{
         nombreMaterias.add(elemento.getNombreMateria());
         });
-
+        log.info("Entramos INFO");
+        log.error("Entramos ERROR");
         model.addAttribute("elementos",nombreMaterias);
         model.addAttribute("materias",materias);
         return "principal";
@@ -133,57 +136,6 @@ public String inicializar(){
     @GetMapping("/verificacion/{id}")
     @ResponseBody
     public String Verificacion(@PathVariable String id, Model model){
-       /* //-->   Vamos a verificar si podemos obtener acceso a un archivo    <--
-        //String DIRECCION = "C://home/site/wwwroot/archivosMarkdown/info.md";
-        String DIRECCION = "C:\\home\\site\\wwwroot\\archivosMarkdown\\info.md";
-        ArrayList<String> buf = new ArrayList<>();
-        try {
-            // Abre el archivo para lectura
-            FileInputStream archivoEntrada = new FileInputStream(DIRECCION);
-            InputStreamReader lector = new InputStreamReader(archivoEntrada);
-            BufferedReader bufferedReader = new BufferedReader(lector);
-
-            // Lee el contenido línea por línea
-            String linea;
-
-            while ((linea = bufferedReader.readLine()) != null) {
-                // Procesa cada línea como desees
-                System.out.println(linea);
-                buf.add(linea);
-            }
-            // Cierra los recursos
-            bufferedReader.close();
-            lector.close();
-            archivoEntrada.close();
-            return buf;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return buf;
-        }*/
 return        Archivos.StringFileAsociado(id,CategoriaArchivos.archivosMarkdown);
-      //  return null;
-
-
-
-
     }
-    /*
-    @GetMapping("/correo/{id}")
-    @ResponseBody
-    public String tryMail(@PathVariable String id) throws MessagingException, javax.mail.MessagingException {
-        System.out.println(id);
-        String email="fabian3117@frba.utn.edu.ar";
-        String message = "Welcome to Udeesa, test token";
-        String from = "no-reply@udeesa.org";
-        javax.mail.internet.MimeMessage mimeMessage1 = javaMailSender.createMimeMessage();
-        MimeMessageHelper mimeMessageHelper=new MimeMessageHelper(mimeMessage1,"utf-8");
-        mimeMessageHelper.setFrom(from);
-        mimeMessageHelper.setTo(email);
-        mimeMessageHelper.setSubject("EMAIL_CONFIRMATION_SUBJECT");
-        mimeMessageHelper.setText(email);
-        javaMailSender.send(mimeMessageHelper.getMimeMessage());
-    //    helper.setText(email);
-        return "";
-    }*/
-    
 }
