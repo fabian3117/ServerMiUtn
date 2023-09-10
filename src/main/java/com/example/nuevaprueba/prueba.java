@@ -103,6 +103,7 @@ public String inicializar(){
         log.error("Entramos ERROR");
         model.addAttribute("elementos",nombreMaterias);
         model.addAttribute("materias",materias);
+       //  return "inicio";
         return "principal";
     }
 
