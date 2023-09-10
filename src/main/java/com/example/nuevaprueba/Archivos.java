@@ -1,5 +1,6 @@
 package com.example.nuevaprueba;
 
+import com.example.nuevaprueba.enums.CategoriaArchivos;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
@@ -13,7 +14,7 @@ import java.nio.charset.StandardCharsets;
  * Clase encargada del manejo de los archivos
  */
 public class Archivos {
-    static public ClassPathResource ObtenerPathArchivo(CategoriaArchivos categoriaArchivos,String id){
+    static public ClassPathResource ObtenerPathArchivo(CategoriaArchivos categoriaArchivos, String id){
 
         //String resourceName="archivosMarkdown/"+id;
         String resourceName=categoriaArchivos.getValorAsociado()+id;
@@ -62,7 +63,7 @@ public class Archivos {
         HtmlRenderer renderer = HtmlRenderer.builder().build();
         return renderer.render(document);
     }
-    static String MarkdownToHtml(String markdownContent){
+    public static String MarkdownToHtml(String markdownContent){
         Parser parser = Parser.builder().build();
         Node document = parser.parse(markdownContent);
         HtmlRenderer renderer = HtmlRenderer.builder().build();

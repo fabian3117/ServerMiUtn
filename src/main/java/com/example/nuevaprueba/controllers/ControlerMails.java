@@ -1,5 +1,9 @@
-package com.example.nuevaprueba;
+package com.example.nuevaprueba.controllers;
 
+import com.example.nuevaprueba.Archivos;
+import com.example.nuevaprueba.CorreoModelo;
+import com.example.nuevaprueba.Generales;
+import com.example.nuevaprueba.enums.CategoriaArchivos;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -38,7 +42,7 @@ public class ControlerMails {
         mimeMessageHelper.setTo(correoModelo.getCorreo());
 
         mimeMessageHelper.setSubject( Generales.MensajeMailApuntes);
-        String markdownContent=Archivos.StringFileAsociado(id,CategoriaArchivos.archivosMarkdown);
+        String markdownContent= Archivos.StringFileAsociado(id, CategoriaArchivos.archivosMarkdown);
         Context context = new Context();
         context.setVariable("htmlContent",markdownContent);
         String content = springTemplateEngine.process("templateMails", context);

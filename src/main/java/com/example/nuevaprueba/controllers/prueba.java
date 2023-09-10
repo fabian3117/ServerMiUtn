@@ -1,24 +1,17 @@
-package com.example.nuevaprueba;
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
+package com.example.nuevaprueba.controllers;
+import com.example.nuevaprueba.*;
+import com.example.nuevaprueba.enums.CategoriaArchivos;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
-import org.commonmark.node.Node;
-import org.commonmark.parser.Parser;
-import org.commonmark.renderer.html.HtmlRenderer;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.util.StreamUtils;
 
 
 import java.io.*;
 import java.util.List;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 @Controller
@@ -38,8 +31,8 @@ public class prueba {
 }
 @GetMapping("/inicializar")
 public String inicializar(){
-        /*
-        if(!materiasRepo.existsByIdIsNotEmpty()){
+
+
             //-->   No tenemos datos    <--
             ArrayList<String> strings= new ArrayList<>();
             strings.add("Álgebra y Geometría Analítica-11");
@@ -88,7 +81,6 @@ public String inicializar(){
                 materias.setCuatrimestre(Generales.cuatrimestreDefault);
                 materiasRepo.save(materias);
             }
-        }*/
         return "redirect:/";
 }
      @GetMapping("")
@@ -128,7 +120,7 @@ public String inicializar(){
 //        ClassPathResource resource = new ClassPathResource(resourceName);
 
           model.addAttribute("error","resource.getPath()");
-          String markdownContent=Archivos.StringFileAsociado(id,CategoriaArchivos.archivosMarkdown);
+          String markdownContent= Archivos.StringFileAsociado(id, CategoriaArchivos.archivosMarkdown);
             model.addAttribute("Titulo",id);
           model.addAttribute("htmlContent", Archivos.MarkdownToHtml(markdownContent));
             return "testMarkdown";
