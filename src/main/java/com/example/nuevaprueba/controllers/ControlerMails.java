@@ -2,7 +2,7 @@ package com.example.nuevaprueba.controllers;
 
 import com.example.nuevaprueba.Archivos;
 import com.example.nuevaprueba.CorreoModelo;
-import com.example.nuevaprueba.Generales;
+import com.example.nuevaprueba.utils.Generales;
 import com.example.nuevaprueba.enums.CategoriaArchivos;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,7 @@
 package com.example.nuevaprueba;
 
 import com.example.nuevaprueba.enums.CategoriaArchivos;
+import com.example.nuevaprueba.utils.Generales;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
@@ -27,7 +28,7 @@ public class Archivos {
     }
 
     static public String StringFileAsociado(String id,CategoriaArchivos categoriaArchivos){
-        String direccion=Generales.Direccion+categoriaArchivos+Generales.Separador+id;
+        String direccion= Generales.Direccion+categoriaArchivos+Generales.Separador+id;
 
     StringBuilder contenido = new StringBuilder();
     try{

@@ -1,6 +1,7 @@
 package com.example.nuevaprueba.controllers;
 import com.example.nuevaprueba.*;
 import com.example.nuevaprueba.enums.CategoriaArchivos;
+import com.example.nuevaprueba.utils.Generales;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
