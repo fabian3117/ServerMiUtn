@@ -3,6 +3,8 @@ import com.example.nuevaprueba.*;
 import com.example.nuevaprueba.enums.CategoriaArchivos;
 import com.example.nuevaprueba.utils.Generales;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,8 +121,9 @@ public String inicializar(){
         //String resourceName="archivosMarkdown/info1.md";
   //      String resourceName="archivosMarkdown/"+id;
 //        ClassPathResource resource = new ClassPathResource(resourceName);
+          Resource resource = new ClassPathResource("archivosMarkdown/Info1.md");
 
-          model.addAttribute("error","resource.getPath()");
+          model.addAttribute("error",resource.exists());
           String markdownContent= Archivos.StringFileAsociado(id, CategoriaArchivos.archivosMarkdown);
             model.addAttribute("Titulo",id);
           model.addAttribute("htmlContent", Archivos.MarkdownToHtml(markdownContent));

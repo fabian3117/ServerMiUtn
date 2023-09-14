@@ -29,10 +29,7 @@ public class ControlerWhatssapp {
     @GetMapping("/send/{number}")
     public void enviaArchivo(@PathVariable @NonNull String number){
         //-->   Generamos el envio a la API de facebook con los datos   <--
-
-
         String urlBase="https://graph.facebook.com/v17.0/"+numberServer+"/messages";
-        //String tockenAuth="EAAJs83IXjvEBO2dfpoOG0FvglfbeKk7qYCa2jsB36lSDIcYZA6D6XmO7Fjga5D49qqDalReUQKZCZCmsZCyJfKhxw8xQeIfbAuLIOH2LOZAvZBcHn8YUQNDrWmkJ1de7EOoNkDa0PEVByHTpK7O4Dnn6zoVwUEvZBwQrgxcfaMqhN3qik2mZB48ldSjLsCPp01AaZAp17f9yVa92SzPCZAfvgZD";
         HttpHeaders headers = new HttpHeaders();
         String test="{\n" +
                 "   \"recipient_type\": \"individual\",\n" +
