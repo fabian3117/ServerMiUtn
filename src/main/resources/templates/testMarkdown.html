@@ -11,6 +11,7 @@
 <div class="boton-flotante">
     <button id="btnSendMail">Enviar al correo</button>
     <button>Descargar ahora</button>
+    <button th:if="${error !=null}" th:text="${error}"></button>
 </div>
 <div>
     <div id="myModal" class="modal">
