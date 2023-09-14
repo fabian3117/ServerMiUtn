@@ -123,7 +123,7 @@ public String inicializar(){
 //        ClassPathResource resource = new ClassPathResource(resourceName);
           Resource resource = new ClassPathResource("archivosMarkdown/Info1.md");
 
-          model.addAttribute("error",resource.exists());
+          model.addAttribute("error",resource.exists()?"Existe":"NO Existe");
           String markdownContent= Archivos.StringFileAsociado(id, CategoriaArchivos.archivosMarkdown);
             model.addAttribute("Titulo",id);
           model.addAttribute("htmlContent", Archivos.MarkdownToHtml(markdownContent));
