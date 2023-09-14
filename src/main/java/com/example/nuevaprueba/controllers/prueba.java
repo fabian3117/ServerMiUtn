@@ -124,9 +124,11 @@ public String inicializar(){
           Resource resource = new ClassPathResource("archivosMarkdown/Info1.md");
 
           model.addAttribute("error",resource.exists()?"Existe":"NO Existe");
-          String markdownContent= Archivos.StringFileAsociado(id, CategoriaArchivos.archivosMarkdown);
+          //String markdownContent= Archivos.StringFileAsociado(id, CategoriaArchivos.archivosMarkdown);
+          String markdownContent= Archivos.archivoMarkdown("Info1.md");
             model.addAttribute("Titulo",id);
-          model.addAttribute("htmlContent", Archivos.MarkdownToHtml(markdownContent));
+         // model.addAttribute("htmlContent", Archivos.MarkdownToHtml(markdownContent));
+          model.addAttribute("htmlContent", markdownContent);
             return "testMarkdown";
 
     }
