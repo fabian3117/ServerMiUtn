@@ -6,21 +6,29 @@ import com.example.nuevaprueba.enums.Modalidad;
 import com.example.nuevaprueba.enums.Sedes;
 import com.example.nuevaprueba.repository.*;
 import com.example.nuevaprueba.security.Credenciales;
+import com.example.nuevaprueba.services.EnvioCorreos;
+import com.example.nuevaprueba.utils.Generales;
+import jakarta.mail.MessagingException;
 import lombok.NonNull;
+import org.thymeleaf.context.Context;
+
 import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.function.EntityResponse;
 
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -334,12 +342,110 @@ return materiasHoy;
 
     @PostMapping("/seccionInicio")
     @ResponseBody
-    public String seccionInicio(@RequestBody @NonNull Credenciales credenciales){
-        //-->   TODO buscar en DB si existe un usuario con este hash    <---
+    public ResponseEntity<?> seccionInicio(@RequestBody @NonNull Credenciales credenciales) {
+        // Buscar en la base de datos si existe un usuario con ese nombre de usuario
+        //Optional<Perfil> optionalPerfil = repositoryPerfil.findById(credenciales.getUsuario());
+        Optional<Perfil> optionalPerfil=repositoryPerfil.findByUserName(credenciales.getUsuario());
+//todo no tengo que buscar por id si no por username
+        if (optionalPerfil.isPresent()) {
+            Perfil perfil = optionalPerfil.get();
 
-        return credenciales.getUsuario();
+            // Verificar si la contraseña coincide
+            if (perfil.getPassword().equals(credenciales.getClave())) {
+                // Autenticación correcta, devolver el perfil
+                return new ResponseEntity<>(perfil, HttpStatus.OK);
+            } else {
+                // Contraseña incorrecta
+                return new ResponseEntity<>("Credenciales incorrectas", HttpStatus.UNAUTHORIZED);
+            }
+        } else {
+            // Usuario no encontrado en la base de datos
+            return new ResponseEntity<>("Usuario no encontrado", HttpStatus.NOT_FOUND);
+        }
     }
+    @PostMapping("/verificaUsuarioExistente")
+    @ResponseBody
+    public ResponseEntity<?> verificaUsuarioExistente(@RequestBody @NonNull Map<String,String> datos) {
+        // Buscar en la base de datos si existe un usuario con ese nombre de usuario
+        //TODO Luego ampliar busqueda por correo
+        String usuario=datos.get("usuario");
+        String carrera=datos.get("carrera");
+        Optional<Perfil> optionalPerfil = repositoryPerfil.findById(usuario);
+        if (!optionalPerfil.isPresent()) {
+            // Usuario puede registrarse
+            ArrayList<Carrera> byId = carreras.findById(carrera);
+            ArrayList<NMateria> materias = carreras.findById(carrera).get(0).getMaterias();
+            //TODO tengo que enviar todo el programa analitico de la carrera para mostrarlo en el sideSheet
+                return new ResponseEntity<>(materias, HttpStatus.OK);
+        }
+            // Usuario no puede registrarse
+            log.error("Entramos B","B");
+            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+    }
+    @PostMapping("/nuevoUsuario")
+    @ResponseBody
+    public ResponseEntity<?> nuevoUsuario(@RequestBody @NonNull Map<String,String> datos) {
+        // Buscar en la base de datos si existe un usuario con ese nombre de usuario
+        //TODO Luego ampliar busqueda por correo
+        String usuario=datos.get("usuario");
+        String carrera=datos.get("carrera");
+        ArrayList<String> materias=new ArrayList<>();
+        ArrayList<NMateria>materiasCursadas =new ArrayList<>();
+        Optional<Perfil> optionalPerfil = repositoryPerfil.findById(usuario);
+        if (!optionalPerfil.isPresent()) {
+            ArrayList<Carrera> byId = carreras.findById(carrera);
+           int contador= Integer.parseInt(datos.get("materiasSize"));
+           for(int i=0;i<contador;i++){
+               materias.add(datos.get("materia"+i));
+               log.error(datos.get("materia"+i));
+           }
+           //TODO link materia string con MATERIA del programa
+           Perfil perfil=new Perfil();
+           perfil.setId(carrera+usuario);   //-->   El usuario SIU funciona como valor unico asi que "confio en eso por ahora"  <--
+           perfil.setName(datos.get("nombre"));
+           //TODO TERMINAR ACA PERO PARTE ANDROID
+           perfil.setUserName(datos.get("nombre"));
+           perfil.setPassword(datos.get("hash"));
+           perfil.setCarrea(Carreras.valueOf(carrera));
+           perfil.setLegajo(datos.get("legajo"));
+           perfil.setUserSIU(usuario);
+           perfil.setCorreoInstitucional(datos.get("correo"));
+           perfil.setMateriasCursadas(materiasCursadas);
+           perfil.setMateriasCursando(new ArrayList<>());
+           repositoryPerfil.save(perfil);
+            //TODO tengo que enviar todo el programa analitico de la carrera para mostrarlo en el sideSheet
+                return new ResponseEntity<>(perfil, HttpStatus.OK);
+        }
+            // Usuario no puede registrarse
+            log.error("Entramos B","B");
+            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+    }
+    @Autowired
+    EnvioCorreos envioCorreos;
+    @PostMapping("/restaurarClave")
+    @ResponseBody
+    public ResponseEntity<?> restaurarClave(@RequestBody @NonNull String correo) throws MessagingException, javax.mail.MessagingException {
+        // Buscar en la base de datos si existe un usuario con ese nombre de usuario
+        // Verifico si esta en db y en caso de estar envio el correo y retorno ok
+        correo=correo.replaceAll("^\"|\"$", "");
+        if(!correo.contains("@frba.utn.edu.ar")){
+            correo=correo.concat(Generales.dominioCorreos);
+        }
+        Optional<Perfil> usuario=repositoryPerfil.findPerfilByCorreoInstitucional(correo);
+        if(usuario.isEmpty()){
+            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+        }
 
+        //todo envio el mail    <--
+        envioCorreos.sendEmail(correo, Generales.asuntoMailRestauracion,"HOLA");
+        Context context=new Context();
+        envioCorreos.sendHtmlEmail(correo,Generales.asuntoMailRestauracion,"templateMails",context);
+        return new ResponseEntity<>(true, HttpStatus.OK);
+
+    }
+private boolean existeCorreo(String correo){
+    return false;
+}
 
 }
 

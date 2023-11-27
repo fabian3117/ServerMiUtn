@@ -3,7 +3,8 @@ package com.example.nuevaprueba.enums;
 public enum Carreras {
 
     Electronica("IngenieriaElectronica"),
-    Mecanica("IngenieriaMecanica");
+    Mecanica("IngenieriaMecanica"),
+    Ingreso("Ingreso");
 
     private String valor;
     Carreras(String valor) {
