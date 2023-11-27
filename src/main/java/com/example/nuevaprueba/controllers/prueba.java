@@ -1,9 +1,6 @@
 package com.example.nuevaprueba.controllers;
 import com.example.nuevaprueba.entitys.*;
-import com.example.nuevaprueba.enums.Carreras;
-import com.example.nuevaprueba.enums.Cuatrimestres;
-import com.example.nuevaprueba.enums.Modalidad;
-import com.example.nuevaprueba.enums.Sedes;
+import com.example.nuevaprueba.enums.*;
 import com.example.nuevaprueba.repository.*;
 import com.example.nuevaprueba.security.Credenciales;
 import com.example.nuevaprueba.services.EnvioCorreos;
@@ -11,33 +8,24 @@ import com.example.nuevaprueba.utils.Generales;
 import jakarta.mail.MessagingException;
 import lombok.NonNull;
 import org.thymeleaf.context.Context;
-
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.function.EntityResponse;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
-
 @Controller
 @Slf4j
 
 //@RestController
 @RequestMapping("")
 public class prueba {
+    @Autowired
+    EnvioCorreos envioCorreos;
 @Autowired
     RepositoryMateria repositoryMateria;
 @Autowired
@@ -66,32 +54,17 @@ RepositoryFechasExamenes repositoryFechasExamenes;
 @ResponseBody
 public ArrayList<NMateria> ObtenerPrograma(@RequestBody @NonNull  Carreras carrera)
 {
-log.error("ACA","ERROR PROGRAMA");
-   // ArrayList<NprogramaAnalitico> salida=new ArrayList<>();
     return carreras.findById(carrera).get().getMaterias();
 }
 @GetMapping("obtenerFechas")
 @ResponseBody
 public ArrayList<FechasExamenes> ObtenFechasExamenes(){
     ArrayList<FechasExamenes> salida=new ArrayList<>(repositoryFechasExamenes.findAll());
-    //salida=repositoryFechasExamenes.findAll();
     return salida;
 }
-@GetMapping("ipconfig/{carrera}/{materia}")
+
+@GetMapping("")
 @ResponseBody
-public Materia ObtenerMateria(@PathVariable @NonNull String carrera,@PathVariable @NonNull String materia){
-   AtomicReference<Materia> materiaretorna= new AtomicReference<>(new Materia());
-    if(carrera.equals(Carreras.Electronica.getValorAsociado())){
-        repositoryProgramaElectronica.findById(Carreras.Electronica.getValorAsociado()).get().getMaterias().forEach(materia1 -> {
-            if(materia1.getNombre().equals(materia)){
-                materiaretorna.set(materia1);
-            }
-        });
-    }
-    return materiaretorna.get();
-    }
-    @GetMapping("")
-    @ResponseBody
     public String CargaInicial(){
         NMateria informatica= new NMateria();
         NMateria am1= new NMateria();
@@ -113,9 +86,7 @@ public Materia ObtenerMateria(@PathVariable @NonNull String carrera,@PathVariabl
             temarioGenerico.setTema("Tema : "+i);
             temarioArrayListGenerico.add(temarioGenerico);
         }
-        Profile profileTest=new Profile();
         ArrayList<NMateriasCursando> materiaCursando=new ArrayList<>();
-        ArrayList<MateriaCursando> materiaCursandosAprobadas=new ArrayList<>();
         informatica.setName("Informatica 1");
         informatica.setId("Informatica 1");
         am1.setName("Analisis matematico 1");
@@ -126,7 +97,6 @@ public Materia ObtenerMateria(@PathVariable @NonNull String carrera,@PathVariabl
         am1.setAnio("1");
         informatica.setAnio("1");
         am1.setId("AM1");
-        profileTest.setId("FEDE");
         temariosAM2.add(temarioAm2);
         am2.setProgramaAnalitico(new NprogramaAnalitico(temarios));
         am1.setProgramaAnalitico(new NprogramaAnalitico(temarios));
@@ -149,7 +119,6 @@ public Materia ObtenerMateria(@PathVariable @NonNull String carrera,@PathVariabl
         ArrayList<Materia> materiasaprobadas=new ArrayList<>();
 
         //-->   NOTE: Materias que ESTOY CURSANDO<--
-        profileTest.setMateriasCursadasAprobadas(materiasaprobadas);
         am1Cursando.setHorario(new Horarios("lunes","15:00","17:00","S05", Sedes.Campus));
         am1Cursando.setMateria(am1);
         F1Cursando.setMateria(F1);
@@ -161,10 +130,7 @@ public Materia ObtenerMateria(@PathVariable @NonNull String carrera,@PathVariabl
         materiasCursadas.add(F1);
         perfil.setMateriasCursadas(materiasCursadas);
         perfil.setUserName("USERNAME");
-        //repositoryPerfil.save(perfil);
         repositoryPerfil.save(perfil);
-        //repositoryProfile.save(profileTest);
-
         Carrera carreraElectronica=new Carrera();
         carreraElectronica.setId(Carreras.Electronica);
         NMateria materia=new NMateria();
@@ -174,41 +140,20 @@ public Materia ObtenerMateria(@PathVariable @NonNull String carrera,@PathVariabl
         materia.setAnio("1");
         materia.setCuatrimestre(Cuatrimestres.PrimerCuatrimestre);
         materia.setModalidad(Modalidad.Hibrido);
-        NMateria material=new NMateria();
-        material.setName("AGA");
-        material.setId("AGA");
-        materia.setCorrelativas(new ArrayList<>());
-        materia.setAnio("1");
-        materia.setCuatrimestre(Cuatrimestres.PrimerCuatrimestre);
-        materia.setModalidad(Modalidad.Hibrido);
         NprogramaAnalitico nprogramaAnalitico=new NprogramaAnalitico();
         nprogramaAnalitico.setTemas(temarioArrayListGenerico);
        // nprogramaAnalitico.setTemas(temarioGenerico);
         ArrayList<NMateria> materiasCarrera=new ArrayList<>();
         materia.setProgramaAnalitico(nprogramaAnalitico);
-
         materiasCarrera.add(materia);
         materiasCarrera.add(F1);
         materiasCarrera.add(am1);
         materiasCarrera.add(am2);
         carreraElectronica.setId(Carreras.Electronica);
-
         carreraElectronica.setMaterias(materiasCarrera);
-
         carreras.save(carreraElectronica);
         Carrera carreraMecanica=new Carrera();
         carreraElectronica.setId(Carreras.Mecanica);
-        NMateria materiall=new NMateria();
-        materiall.setName("AGA");
-        materiall.setId("AGA");
-        materiall.setCorrelativas(new ArrayList<>());
-        materiall.setAnio("1");
-        materiall.setCuatrimestre(Cuatrimestres.PrimerCuatrimestre);
-        materiall.setModalidad(Modalidad.Hibrido);
-        ArrayList<NMateria> materiasCarrerall=new ArrayList<>();
-        materiasCarrerall.add(materiall);
-
-        materiall.setProgramaAnalitico(nprogramaAnalitico);
         carreraMecanica.setId(Carreras.Mecanica);
         carreraMecanica.setMaterias(materiasCarrera);
         carreras.save(carreraMecanica);
@@ -220,11 +165,6 @@ public Materia ObtenerMateria(@PathVariable @NonNull String carrera,@PathVariabl
         fechaProxima.setMateria(materia1);
         repositoryFechasExamenes.save(fechaProxima);
         return "saludo";
-}
-@GetMapping("obtenerMateriasCursadas/{profile}")
-@ResponseBody
-public ArrayList<Materia> ObtenerMateriasCursadas(@PathVariable @NonNull String profile){
-    return repositoryProfile.findById(profile).get().getMateriasCursadasAprobadas();
 }
 @GetMapping("puedeCursar/{profile}")
 @ResponseBody
@@ -242,40 +182,6 @@ public ArrayList<String> PuedeCursar(@PathVariable @NonNull String profile){
     }
     return salida;
 }
-@GetMapping("Ver")
-    @ResponseBody
-    public String muestra(){
-        ArrayList<String> salida=new ArrayList<>();
-        repositoryMateria.findAll().forEach(materia -> {
-            salida.add(materia.getNombre());
-        });
-        return  salida.toString();
-    }
-
-    @GetMapping("obtenerMaterias/{profile}")
-    @ResponseBody
-    public ArrayList<MateriaCursando> obtenerMateriasCursando(@PathVariable @NonNull String profile){
-    ArrayList<MateriaCursando> materiaCursandos=new ArrayList<>();
-    //-->   Connection to db and obtein date of matery currently studying
-   return  repositoryProfile.findById(profile).get().getMateriaCursandos();
-
-//    return materiaCursandos;
-    }
-    @GetMapping("obtenerMaterias/{profile}/{dia}")
-    @ResponseBody
-    public ArrayList<MateriaCursando> TestFiltrado(@PathVariable @NonNull String profile,@PathVariable @NonNull String dia){
-
-        ArrayList<MateriaCursando> materiasHoy=new ArrayList<>();
-        Profile test=repositoryProfile.findById(profile).get();
-        test.getMateriaCursandos().forEach(materiaCursando -> {
-            if(materiaCursando.getDia().equals(dia)){
-                materiasHoy.add(materiaCursando);
-            }
-            //(materiaCursando.getDia().equals("Lunes"))?materiasHoy.add(materiaCursando):continue;
-        });
-return materiasHoy;
-    }
-
     @PostMapping("CargaPerfil")
     @ResponseBody
     public boolean CargaPerfil(@RequestBody Perfil perfil){
@@ -399,11 +305,9 @@ return materiasHoy;
                materias.add(datos.get("materia"+i));
                log.error(datos.get("materia"+i));
            }
-           //TODO link materia string con MATERIA del programa
            Perfil perfil=new Perfil();
            perfil.setId(carrera+usuario);   //-->   El usuario SIU funciona como valor unico asi que "confio en eso por ahora"  <--
            perfil.setName(datos.get("nombre"));
-           //TODO TERMINAR ACA PERO PARTE ANDROID
            perfil.setUserName(datos.get("nombre"));
            perfil.setPassword(datos.get("hash"));
            perfil.setCarrea(Carreras.valueOf(carrera));
@@ -413,15 +317,13 @@ return materiasHoy;
            perfil.setMateriasCursadas(materiasCursadas);
            perfil.setMateriasCursando(new ArrayList<>());
            repositoryPerfil.save(perfil);
-            //TODO tengo que enviar todo el programa analitico de la carrera para mostrarlo en el sideSheet
                 return new ResponseEntity<>(perfil, HttpStatus.OK);
         }
             // Usuario no puede registrarse
             log.error("Entramos B","B");
             return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
     }
-    @Autowired
-    EnvioCorreos envioCorreos;
+
     @PostMapping("/restaurarClave")
     @ResponseBody
     public ResponseEntity<?> restaurarClave(@RequestBody @NonNull String correo) throws MessagingException, javax.mail.MessagingException {
